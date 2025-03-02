@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {View, Text, ScrollView, Alert, Platform, Button} from 'react-native';
 import twrnc from 'tailwind-react-native-classnames';
-import SerialportBluetooth, {
-  SerialBluetoothManager,
-} from 'react-native-serialport-bluetooth';
+import RNBluetoothClassic, {
+  BluetoothEventType,
+} from 'react-native-bluetooth-classic';
 import {
   request,
   PERMISSIONS,
@@ -52,11 +52,11 @@ const App = () => {
   // Function to scan for available Bluetooth devices
   const fetchBluetoothDevices = async () => {
     try {
-      if (!SerialBluetoothManager) {
-        console.error('SerialBluetoothManager is undefined');
+      if (!RNBluetoothClassic) {
+        console.error('RNBluetoothClassic is undefined');
         return;
       }
-      const devices = await SerialBluetoothManager.list();
+      const devices = await RNBluetoothClassic.startDiscovery();
       setPairedDevices(devices);
     } catch (error) {
       console.error('Error fetching Bluetooth devices:', error);
@@ -67,11 +67,11 @@ const App = () => {
   const toggleBluetooth = async () => {
     try {
       if (isBluetoothOn) {
-        await SerialBluetoothManager.disable();
+        await RNBluetoothClassic.disable();
         setIsBluetoothOn(false);
         console.log('Bluetooth turned OFF');
       } else {
-        await SerialBluetoothManager.enable();
+        await RNBluetoothClassic.enable();
         setIsBluetoothOn(true);
         console.log('Bluetooth turned ON');
       }
